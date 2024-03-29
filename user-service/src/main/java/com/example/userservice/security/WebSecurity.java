@@ -17,7 +17,6 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
 
@@ -53,6 +52,7 @@ public class WebSecurity {
         http.authorizeHttpRequests(
                         authorize  -> authorize
                                 .requestMatchers(WHITE_LIST).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/actuator/**")).permitAll()
                                 .requestMatchers(PathRequest.toH2Console()).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/users", "POST")).permitAll()
                                 .requestMatchers(new IpAddressMatcher("127.0.0.1")).permitAll()

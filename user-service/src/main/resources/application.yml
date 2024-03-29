@@ -30,6 +30,12 @@ eureka:
 greeting:
   message: Welcome to the Simple E-commerce.
 
-token:
-  expiration_time: 86400000
-  secret: dfe4a993c087c80b0ee8f11509e8c6712e8949592851f33c0244ad9f3da787a369113dd2afedcca884a86c2a5841209530948cf3aef43a0a1bd1f75bb1750f82
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans
+
+#token:
+#  expiration_time: 86400000
+#  secret: dfe4a993c087c80b0ee8f11509e8c6712e8949592851f33c0244ad9f3da787a369113dd2afedcca884a86c2a5841209530948cf3aef43a0a1bd1f75bb1750f82
