@@ -1,0 +1,6 @@
+encrypt:
+  key-store:
+    location: file:///C:\key-pair\apiEncryptionKey.jks
+    password: test1234
+    alias: apiEncryptionKey
+#  key: abcdefghijklmnopqrstuvwxyz0123456789
