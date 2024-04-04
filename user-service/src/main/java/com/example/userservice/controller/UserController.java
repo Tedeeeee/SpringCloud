@@ -44,7 +44,7 @@ public class UserController {
     @GetMapping("/welcome")
     public String welcome() {
         // return env.getProperty("greeting.welcome");
-        return greeting.getMessage();
+        return Greeting.message;
     }
 
     @PostMapping("/users")

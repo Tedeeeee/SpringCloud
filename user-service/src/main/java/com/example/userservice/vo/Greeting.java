@@ -7,6 +7,16 @@ import org.springframework.stereotype.Component;
 @Component
 @Data
 public class Greeting {
+    public static String message;
+    public static String url;
+
     @Value("${greeting.message}")
-    private String message;
+    public static void setMessage(String value) {
+        Greeting.message = value;
+    }
+
+    @Value("${order_service.url}")
+    public static void setUrl(String value) {
+        Greeting.url = value;
+    }
 }

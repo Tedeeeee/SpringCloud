@@ -35,11 +35,16 @@ eureka:
 greeting:
   message: Welcome to the Simple E-commerce.
 
+
 management:
   endpoints:
     web:
       exposure:
         include: refresh, health, beans, busrefresh
+
+logging:
+  level:
+    com.example.userservice.client: DEBUG
 
 #token:
 #  expiration_time: 86400000
