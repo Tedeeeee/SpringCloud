@@ -17,8 +17,13 @@ spring:
     generate-ddl: true
     defer-datasource-initialization: true
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:mariadb://localhost:3306/mydb
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: 1234
+#    url: jdbc:h2:mem:testdb
 #    username: sa
+
 
 eureka:
   instance:
