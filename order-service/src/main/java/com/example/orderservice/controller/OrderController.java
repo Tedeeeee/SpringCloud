@@ -7,6 +7,7 @@ import com.example.orderservice.messagequeue.OrderProducer;
 import com.example.orderservice.service.OrderService;
 import com.example.orderservice.vo.RequestOrder;
 import com.example.orderservice.vo.ResponseOrder;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/order-service")
+@Slf4j
 public class OrderController {
 
     private OrderService orderService;
@@ -45,37 +47,41 @@ public class OrderController {
     @PostMapping("/{userId}/orders")
     public ResponseEntity<ResponseOrder> createOrder(@PathVariable("userId") String userId,
                                                     @RequestBody RequestOrder orderDetails) {
+
+        log.info("Before add orders microservice");
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
         OrderDto orderDto = mapper.map(orderDetails, OrderDto.class);
         orderDto.setUserId(userId);
 
-//        OrderDto createdOrder = orderService.createOrder(orderDto);
-//        ResponseOrder responseOrder = mapper.map(createdOrder, ResponseOrder.class);
+        // JPA
+        OrderDto createdOrder = orderService.createOrder(orderDto);
+        ResponseOrder responseOrder = mapper.map(createdOrder, ResponseOrder.class);
 
-        orderDto.setOrderId(UUID.randomUUID().toString());
-        orderDto.setTotalPrice(orderDetails.getQty() * orderDetails.getUnitPrice());
+//        // kafka
+//        orderDto.setOrderId(UUID.randomUUID().toString());
+//        orderDto.setTotalPrice(orderDetails.getQty() * orderDetails.getUnitPrice());
+//        kafkaProducer.send("example-catalog-topic", orderDto);
+//
+//        // kafka Connect
+//        orderProducer.send("orders", orderDto);
 
-        // kafka
-        kafkaProducer.send("example-catalog-topic", orderDto);
-
-        // kafka Connect
-        orderProducer.send("orders", orderDto);
-
-        ResponseOrder responseOrder = mapper.map(orderDto, ResponseOrder.class);
+//        ResponseOrder responseOrder = mapper.map(orderDto, ResponseOrder.class);
+        log.info("After added orders microservice");
         return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder);
     }
 
     @GetMapping("/{userId}/orders")
     public ResponseEntity<List<ResponseOrder>> getOrder(@PathVariable("userId") String userId) {
+        log.info("Before retrieve orders microservice");
         Iterable<OrderEntity> orderList = orderService.getOrdersByUserId(userId);
 
         List<ResponseOrder> result = new ArrayList<>();
         orderList.forEach(v -> {
             result.add(new ModelMapper().map(v, ResponseOrder.class));
         });
-
+        log.info("After retrieved orders microservice");
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
