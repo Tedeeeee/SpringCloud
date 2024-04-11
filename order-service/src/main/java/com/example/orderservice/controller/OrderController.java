@@ -73,7 +73,7 @@ public class OrderController {
     }
 
     @GetMapping("/{userId}/orders")
-    public ResponseEntity<List<ResponseOrder>> getOrder(@PathVariable("userId") String userId) {
+    public ResponseEntity<List<ResponseOrder>> getOrder(@PathVariable("userId") String userId) throws Exception {
         log.info("Before retrieve orders microservice");
         Iterable<OrderEntity> orderList = orderService.getOrdersByUserId(userId);
 
@@ -81,6 +81,14 @@ public class OrderController {
         orderList.forEach(v -> {
             result.add(new ModelMapper().map(v, ResponseOrder.class));
         });
+
+        try {
+            Thread.sleep(1000);
+            throw new Exception("장애 발생");
+        } catch (InterruptedException e) {
+            log.warn(e.getMessage());
+        }
+
         log.info("After retrieved orders microservice");
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
